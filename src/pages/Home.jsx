@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
-import MovieCard from "../components/MovieCard";
 import NavBar from "../components/NavBar"
 
+import MovieCard from "../components/MovieCard"
+
 function Home() {
-const [movies, setMovies] = useState([])
 
-useEffect(() =>{
-  fetch("http://localhost:3000/movies")
-  .then(r => r.json())
-  .then(data => setMovies(data))
-  .catch(error => console.error(error))
-}, [])
-
-const movieList = movies.map(movie => <MovieCard key={movie.id} title={movie.title} id={movie.id}/>)
-
+  const [movies, setMovies] = useState([])
+  useEffect(() => {
+    fetch('http://localhost:4000/movies')
+    .then(res => res.json())
+    .then(data => setMovies(data))
+    .catch(error => console.error(error))
+  }, [])
   return (
     <>
       <header>
@@ -21,10 +19,17 @@ const movieList = movies.map(movie => <MovieCard key={movie.id} title={movie.tit
       </header>
       <main>
         <h1>Home Page</h1>
-        {movieList}
+        {movies.map(movie => 
+          <MovieCard 
+            key={movie.id + movie.title}
+            id={movie.id} 
+            title={movie.title}
+            time={movie.time}
+            genres={movie.genres}
+            />)}
       </main>
     </>
   );
-}
+};
 
 export default Home;

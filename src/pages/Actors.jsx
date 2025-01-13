@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
-import Card from "../components/ReusableCard";
 import NavBar from "../components/NavBar";
+import {v4 as uuidv4} from 'uuid';
 
 function Actors() {
-  const [actors, setActors] = useState([])
+  const [actors, setActors] = useState([]);
 
-  useEffect(() =>{
-    fetch("http://localhost:3000/actors")
-    .then(r => r.json())
-    .then(data => setActors(data))
-    .catch(error => console.error(error))
-  }, [])
+  useEffect(() => {
+    fetch("http://localhost:4000/actors")
+      .then((res) => res.json())
+      .then((data) => setActors(data))
+      .catch((error) => console.error(error));
+  }, []);
 
-  const actorList = actors.map(actor => <Card key={actor.id} name={actor.name} movies={actor.movies} />)
+  if (!actors) {
+    return <h1>Loading...</h1>;
+  }
 
   return (
     <>
@@ -21,7 +23,18 @@ function Actors() {
       </header>
       <main>
         <h1>Actors Page</h1>
-        {actorList}
+          {actors.map((actor) => {
+            return (
+              <article key={uuidv4()}>
+                <h2>{actor.name}</h2>
+                <ul>
+                  {actor.movies.map((movie) => (
+                    <li key={uuidv4()}>{movie}</li>
+                  ))}
+                </ul>
+              </article>
+            )
+          })}
       </main>
     </>
   );
