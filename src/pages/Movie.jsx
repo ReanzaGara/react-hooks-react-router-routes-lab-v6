@@ -1,23 +1,20 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import NavBar from "../components/NavBar";
-import {v4 as uuidv4} from 'uuid';
 
 function Movie() {
-
-  const [movieDetails, setMovieDetails] = useState({})
-  const params = useParams()
-  const movieId = params.id
+  const { id } = useParams(); // Get the movie id from the URL
+  const [movie, setMovie] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:4000/movies/${movieId}`)
-    .then(res => res.json())
-    .then(data => setMovieDetails(() => data))
-  }, [movieId])
+    // Fetch movie data based on the id
+    fetch(`http://localhost:4000/movies/${id}`)
+      .then((r) => r.json())
+      .then((data) => setMovie(data))
+      .catch((error) => console.error(error));
+  }, [id]);
 
-  if(!movieDetails.title){
-    return <h1>Loading...</h1>;
-  }; 
+  if (!movie) return <p>Loading...</p>;
 
   return (
     <>
@@ -25,14 +22,18 @@ function Movie() {
         <NavBar />
       </header>
       <main>
-          <h1>{movieDetails.title}</h1>
-          <p>{movieDetails.time} Minutes</p>
-          {movieDetails.genres.map(genre => <span key={uuidv4()}>{genre}</span>)}
-          
-
+      <h1>{movie.title}</h1>
+      <p>Time: {movie.time}</p>
+        <div>
+          {movie.genres.map((genre, index) => (
+            <span key={index} style={{ marginRight: "5px" }}>
+              {genre}
+            </span>
+          ))}
+        </div>
       </main>
     </>
   );
-};
+}
 
 export default Movie;

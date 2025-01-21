@@ -1,17 +1,18 @@
-import {Link} from 'react-router-dom';
-import {v4 as uuidv4} from "uuid"
+import { Link } from 'react-router-dom';
 
-function MovieCard({id, title, time, genres}) {
-  
-  const genresArr = Array.from(genres)
+function MovieCard({ id, title, genres }) {
   return (
     <article>
-        <h2>{title}</h2>
-        <p>{time} Minutes</p> 
-        {genresArr.map(genre => <span key={uuidv4()}>{genre}</span>)}
-        <br/><Link to={`/movie/${id}`}> View Info</Link>
+      <h2>{title}</h2>
+      <Link to={`/movie/${id}`}>View Info</Link>
+      <p>
+        {genres.map((genre) => (
+          <span key={genre}>{genre} </span>  
+        ))}
+        
+      </p>
     </article>
   );
-};
+}
 
 export default MovieCard;
